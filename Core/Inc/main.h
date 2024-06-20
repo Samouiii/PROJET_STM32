@@ -31,7 +31,11 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include <stdio.h>
+#include "stm32l1xx_it.h"
+#include "stm32l1xx_nucleo_bus.h"
+#include "iks01a3_env_sensors.h"
+#include "iks01a3_env_sensors_ex.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -55,7 +59,7 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
-
+void BreatheSequence(uint32_t MyDelay);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
@@ -79,6 +83,22 @@ void Error_Handler(void);
 #define BTN4_Pin GPIO_PIN_5
 #define BTN4_GPIO_Port GPIOC
 #define BTN4_EXTI_IRQn EXTI9_5_IRQn
+#define LED0_Pin GPIO_PIN_1
+#define LED0_GPIO_Port GPIOB
+#define LED1_Pin GPIO_PIN_2
+#define LED1_GPIO_Port GPIOB
+#define LED2_Pin GPIO_PIN_10
+#define LED2_GPIO_Port GPIOB
+#define LED3_Pin GPIO_PIN_11
+#define LED3_GPIO_Port GPIOB
+#define LED4_Pin GPIO_PIN_12
+#define LED4_GPIO_Port GPIOB
+#define LED5_Pin GPIO_PIN_13
+#define LED5_GPIO_Port GPIOB
+#define LED6_Pin GPIO_PIN_14
+#define LED6_GPIO_Port GPIOB
+#define LED7_Pin GPIO_PIN_15
+#define LED7_GPIO_Port GPIOB
 #define BTN3_Pin GPIO_PIN_6
 #define BTN3_GPIO_Port GPIOC
 #define BTN3_EXTI_IRQn EXTI9_5_IRQn
@@ -96,6 +116,9 @@ void Error_Handler(void);
 #define TCK_GPIO_Port GPIOA
 #define SWO_Pin GPIO_PIN_3
 #define SWO_GPIO_Port GPIOB
+#define DOUBLE_TAP_Pin GPIO_PIN_7
+#define DOUBLE_TAP_GPIO_Port GPIOB
+#define DOUBLE_TAP_EXTI_IRQn EXTI9_5_IRQn
 
 /* USER CODE BEGIN Private defines */
 

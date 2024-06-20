@@ -1,0 +1,11 @@
+../Drivers/display/max7219_Yncrea2.c:111:7:SPI_CS_High	0	static
+../Drivers/display/max7219_Yncrea2.c:117:7:SPI_CS_Low	0	static
+../Drivers/display/max7219_Yncrea2.c:363:13:MAX7219_Write	24	static
+../Drivers/display/max7219_Yncrea2.c:177:6:MAX7219_ShutdownStart	0	static
+../Drivers/display/max7219_Yncrea2.c:192:6:MAX7219_ShutdownStop	0	static
+../Drivers/display/max7219_Yncrea2.c:207:6:MAX7219_DisplayTestStart	0	static
+../Drivers/display/max7219_Yncrea2.c:222:6:MAX7219_DisplayTestStop	0	static
+../Drivers/display/max7219_Yncrea2.c:237:6:MAX7219_SetBrightness	0	static
+../Drivers/display/max7219_Yncrea2.c:253:6:MAX7219_Clear	8	static
+../Drivers/display/max7219_Yncrea2.c:153:6:MAX7219_Init	8	static
+../Drivers/display/max7219_Yncrea2.c:271:6:MAX7219_DisplayChar	8	static

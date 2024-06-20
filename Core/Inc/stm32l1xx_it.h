@@ -27,6 +27,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <stdbool.h>
 
 /* USER CODE END Includes */
 
@@ -62,7 +63,16 @@ void SPI1_IRQHandler(void);
 void EXTI15_10_IRQHandler(void);
 void TIM6_IRQHandler(void);
 /* USER CODE BEGIN EFP */
+void updateVariableSensor();
+void displayVariableSensor();
+void checkVariableSensor();
 
+void displayTemperature();
+void displayHumidity();
+void displayPressure();
+void displayAlarmTemperature();
+void displayAlarmHumidity();
+void displayIndex(char *message);
 /* USER CODE END EFP */
 
 #ifdef __cplusplus

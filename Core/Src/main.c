@@ -21,7 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "max7219_Yncrea2.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -50,7 +50,7 @@ TIM_HandleTypeDef htim6;
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
-
+uint32_t analogValue;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -78,7 +78,7 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-
+	char init_success[12] = {'I','N','I','T',' ','S','U','C','C','E','S','S'};
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -94,7 +94,6 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
@@ -105,16 +104,57 @@ int main(void)
   MX_ADC_Init();
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
+  printf("INIT START\r\n");
+  printf("-INIT SENSOR START\r\n");
+  if (IKS01A3_ENV_SENSOR_Init(IKS01A3_HTS221_0,ENV_TEMPERATURE) != BSP_ERROR_NONE){
+  	  printf("ERROR INIT ENV SENSOR TEMPERATURE\r\n");
+  	  return 1;
+    }
+  else printf("	INIT ENV SENSOR TEMPERATURE FINISH\r\n");
+
+  if (IKS01A3_ENV_SENSOR_Init(IKS01A3_HTS221_0,ENV_HUMIDITY) != BSP_ERROR_NONE){
+	  printf("ERROR INIT ENV SENSOR HUMIDITY\r\n");
+	  return 1;
+  }
+  else printf("	INIT ENV SENSOR HUMIDITY FINISH\r\n");
+
+  if (IKS01A3_ENV_SENSOR_Init(IKS01A3_LPS22HH_0,ENV_PRESSURE) != BSP_ERROR_NONE){
+	  printf("ERROR INIT ENV SENSOR PRESSURE\r\n");
+	  return 1;
+  }
+  else printf("	INIT ENV SENSOR PRESSURE FINISH\r\n");
+
+  printf("INIT SENSOR FINISH\r\n");
+
+  MAX7219_Init();
+  printf("-INIT SCREEN 7 SEGMENT MAX7219 START \r\n");
+  printf("	TEST SCREEN 7 SEGEMENT START \r\n");
+  MAX7219_DisplayTestStart();
+  HAL_Delay(1000);
+  MAX7219_DisplayTestStop();
+  printf("	TEST SCREEN 7 SEGEMENT STOP");
+  printf("INIT SCREEN 7 SEGMENT MAX7219 FINISH \r\n");
+
+  printf("INIT FINISH\r\n");
+  displayIndex(init_success);
+
+  MAX7219_SetBrightness(1);
+  printf("TIMER 3 START\r\n");
+  HAL_TIM_Base_Start_IT(&htim3);
+  HAL_GPIO_EXTI_Callback(BTN1_Pin);
+
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+
   while (1)
   {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+
   }
   /* USER CODE END 3 */
 }
@@ -275,9 +315,9 @@ static void MX_TIM3_Init(void)
 
   /* USER CODE END TIM3_Init 1 */
   htim3.Instance = TIM3;
-  htim3.Init.Prescaler = 32000;
+  htim3.Init.Prescaler = 31;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim3.Init.Period = 32;
+  htim3.Init.Period = 2278;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
@@ -303,11 +343,6 @@ static void MX_TIM3_Init(void)
   sConfigOC.Pulse = 500;
   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-  if (HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sConfigOC.Pulse = 16;
   if (HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)
   {
     Error_Handler();
@@ -408,6 +443,10 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, LED0_Pin|LED1_Pin|LED2_Pin|LED3_Pin
+                          |LED4_Pin|LED5_Pin|LED6_Pin|LED7_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(SPI_CS_GPIO_Port, SPI_CS_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : B1_Pin BTN4_Pin BTN3_Pin */
@@ -415,6 +454,15 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : LED0_Pin LED1_Pin LED2_Pin LED3_Pin
+                           LED4_Pin LED5_Pin LED6_Pin LED7_Pin */
+  GPIO_InitStruct.Pin = LED0_Pin|LED1_Pin|LED2_Pin|LED3_Pin
+                          |LED4_Pin|LED5_Pin|LED6_Pin|LED7_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   /*Configure GPIO pin : SPI_CS_Pin */
   GPIO_InitStruct.Pin = SPI_CS_Pin;
@@ -429,6 +477,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
+  /*Configure GPIO pin : DOUBLE_TAP_Pin */
+  GPIO_InitStruct.Pin = DOUBLE_TAP_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(DOUBLE_TAP_GPIO_Port, &GPIO_InitStruct);
+
   /* EXTI interrupt init*/
   HAL_NVIC_SetPriority(EXTI9_5_IRQn, 1, 0);
   HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
@@ -441,7 +495,28 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+int __io_putchar(int ch) {
+	HAL_UART_Transmit(&huart2, (uint8_t*)&ch, 1, 0xFFFF);
+	// ITM_SendChar(ch);
+	return ch;
+}
 
+void BreatheSequence(uint32_t MyDelay)
+{
+	char i,j;
+
+	for(i=0;i<=0x0F;i++)
+	{
+		j=0x0F-i;
+		MAX7219_SetBrightness(j);
+		HAL_Delay(MyDelay);
+	}
+	for(i=0;i<=0x0F;i++)
+	{
+		MAX7219_SetBrightness(i);
+		HAL_Delay(MyDelay);
+	}
+}
 /* USER CODE END 4 */
 
 /**

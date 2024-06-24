@@ -26,8 +26,8 @@ L'humidité mesurée par le capteur HTS221 est affichée sur l'écran SPI à l'a
 
 ### Configuration des alarmes
 
-La configuration de l'alarme s'effectue par l'appui du bouton BTN3 pour configurer la température à ne pas dépasser, et par l'appui du bouton BTN4 pour configurer l'humidité à ne pas dépasser. Après l'appui sur le bouton souhaité, le potentiomètre PV1 est utilisé pour sélectionner la valeur d'alarme, comprise entre 0 et 40.
+La configuration de l'alarme s'effectue par l'appui du bouton BTN3 pour configurer la température à ne pas dépasser, et par l'appui du bouton BTN4 pour configurer l'humidité à ne pas dépasser. Après l'appui sur le bouton souhaité, le potentiomètre PV1 est utilisé pour sélectionner la valeur d'alarme, comprise entre 0 et 40 °C pour la température et 0 et 100% pour l'humidité.
 
 ### Buzzer et LEDs d'alarme
 
-Lors d'un événement d'alarme, le buzzer émet un son à une fréquence de 1 kHz. Les LEDs L4 à L7 clignotent en cas d'alarme de température, et les LEDs L0 à L3 clignotent en cas d'alarme d'humidité. Un appui sur les boutons BP3 ou BP4, selon le type d'alarme, sert à arrêter l'alarme actuelle.
+Lors d'un événement d'alarme, le buzzer émet un son à une fréquence de 1 kHz. Les LEDs L4 à L7 clignotent en cas d'alarme de température, et les LEDs L0 à L3 clignotent en cas d'alarme d'humidité. Un appui sur le bouton reset sert à arrêter l'alarme actuelle.

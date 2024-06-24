@@ -16,7 +16,7 @@ Ci-dessous se trouve un schéma de la carte présentant la disposition des compo
 
 ![Carte_STM_ISEN](https://github.com/Samouiii/PROJET_STM32/assets/101981670/5640c53b-9e70-430d-add1-0129be8e545c)
 
-### Affichage de la température
+###  Affichage de la température
 
 La température mesurée par le capteur HTS221 est affichée sur l'écran SPI à l'appuis du bouton BTN1.
 
